@@ -1,0 +1,30 @@
+name: Keep HF Spaces Alive
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'  # every 12 hours (safer than 40)
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Meilisearch
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://shajinjoseph-meilisearch.hf.space/health)
+          echo "Meilisearch: $STATUS"
+
+      - name: Ping Code Interpreter
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://shajinjoseph-code-interpreter.hf.space/health)
+          echo "Code Interpreter: $STATUS"
+
+      - name: Ping RAG API
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://shajinjoseph1-rag-api.hf.space/health)
+          echo "RAG API: $STATUS"
+
+      - name: Ping LibreChat
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://shajinjoseph-template.hf.space)
+          echo "LibreChat: $STATUS"
